@@ -1,13 +1,10 @@
-import image1 from "public/images/resume_01.png"
-import image2 from "public/images/resume_02.png"
-import image3 from "public/images/resume_03.png"
 
 export const resumes: Resume[] = [
   {
     id: "1",
     companyName: "Google",
     jobTitle: "Frontend Developer",
-    imagePath: image1,
+    imagePath: "/images/resume_01.png",
     resumePath: "/resumes/resume-1.pdf",
     feedback: {
       overallScore: 85,
@@ -37,7 +34,7 @@ export const resumes: Resume[] = [
     id: "2",
     companyName: "Microsoft",
     jobTitle: "Cloud Engineer",
-    imagePath: image2,
+    imagePath: "/images/resume_02.png",
     resumePath: "/resumes/resume-2.pdf",
     feedback: {
       overallScore: 55,
@@ -67,7 +64,7 @@ export const resumes: Resume[] = [
     id: "3",
     companyName: "Apple",
     jobTitle: "iOS Developer",
-    imagePath: image3,
+    imagePath: "/images/resume_03.png",
     resumePath: "/resumes/resume-3.pdf",
     feedback: {
       overallScore: 75,
@@ -97,7 +94,7 @@ export const resumes: Resume[] = [
     id: "4",
     companyName: "Google",
     jobTitle: "Frontend Developer",
-    imagePath: image1,
+    imagePath: "/images/resume_01.png",
     resumePath: "/resumes/resume-1.pdf",
     feedback: {
       overallScore: 85,
@@ -127,7 +124,7 @@ export const resumes: Resume[] = [
     id: "5",
     companyName: "Microsoft",
     jobTitle: "Cloud Engineer",
-    imagePath: image2,
+    imagePath: "/images/resume_02.png",
     resumePath: "/resumes/resume-2.pdf",
     feedback: {
       overallScore: 55,
@@ -157,7 +154,7 @@ export const resumes: Resume[] = [
     id: "6",
     companyName: "Apple",
     jobTitle: "iOS Developer",
-    imagePath: image3,
+    imagePath: "/images/resume_03.png",
     resumePath: "/resumes/resume-3.pdf",
     feedback: {
       overallScore: 75,
