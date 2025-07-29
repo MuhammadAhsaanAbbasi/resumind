@@ -8,7 +8,11 @@ export const meta = () => ([
 
 const SignUp = () => {
   return (
-    <div>SignUp</div>
+    <main className="bg-[url('/images/bg-main.svg')] bg-cover bg-center">
+      <h1>
+        SignUp
+      </h1>
+    </main>
   )
 }
 

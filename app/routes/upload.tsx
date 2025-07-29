@@ -1,4 +1,5 @@
 import React from 'react'
+import Navbar from '~/components/navigation/Navbar';
 
 export const meta = () => (
   [
@@ -9,7 +10,9 @@ export const meta = () => (
 
 const Upload = () => {
   return (
-    <div>Upload</div>
+    <main className="bg-[url('/images/bg-main.svg')] bg-cover bg-center">
+      <Navbar />
+    </main>
   )
 }
 

@@ -7,7 +7,11 @@ export const meta = () => ([
 
 const SignIn = () => {
   return (
-    <div>sign-in</div>
+    <main className="bg-[url('/images/bg-main.svg')] bg-cover bg-center">
+      <h1>
+        SignIn
+      </h1>
+    </main>
   )
 }
 
