@@ -1,4 +1,5 @@
 import React from 'react'
+import SignUpForm from '~/components/auth/SignUpForm';
 
 export const meta = () => ([
   { title: 'Resumind | SignUp' },
@@ -9,9 +10,7 @@ export const meta = () => ([
 const SignUp = () => {
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover bg-center">
-      <h1>
-        SignUp
-      </h1>
+      <SignUpForm />
     </main>
   )
 }
