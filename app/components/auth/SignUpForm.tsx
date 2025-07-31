@@ -67,61 +67,9 @@ export const SignUpForm = () => {
                 backButtonLabel="Already Have an Account?"
                 backButtonhref='/sign-in'
             >
-                <form className="flex flex-col justify-center gap-4"
+                <form className="flex flex-col justify-center items-center gap-5"
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 justify-center w-full gap-4">
-                        <FormField
-                            control={form.control}
-                            name="dob"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Date of Birth
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type="date"
-                                            disabled={isPending}
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(e.target.value)}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="gender"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Gender
-                                    </FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                        disabled={isPending}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select your Personality Gender." />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="male">Male</SelectItem>
-                                            <SelectItem value="female">FeMale</SelectItem>
-                                            <SelectItem value="other">Other</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div> */}
                     <FormField
                         control={form.control}
                         name="username"
@@ -135,8 +83,8 @@ export const SignUpForm = () => {
                                         {...field}
                                         disabled={isPending}
                                         placeholder='john.doe@gmail.com'
-                                        type="email"
-                                        className='auth_input'
+                                        type="text"
+                                        className='auth-input'
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -157,7 +105,7 @@ export const SignUpForm = () => {
                                         disabled={isPending}
                                         placeholder='john.doe@gmail.com'
                                         type="email"
-                                        className='auth_input'
+                                        className='auth-input'
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -178,7 +126,7 @@ export const SignUpForm = () => {
                                         disabled={isPending}
                                         placeholder='*********'
                                         type='password'
-                                        className='auth_input'
+                                        className='auth-input'
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -198,7 +146,7 @@ export const SignUpForm = () => {
 
                     <Button
                         // disabled={isPending}
-                        type="submit" className='w-full bg-blue-1'>
+                        type="submit" className='auth-button'>
                         Create an Account
                         <BottomGradient />
                     </Button>

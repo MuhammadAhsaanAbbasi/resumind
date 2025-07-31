@@ -66,11 +66,11 @@ export const SignInForm = () => {
             {...form}
         >
             <CardWrapper
-                headerlabels='Welcome Back in LOOM'
+                headerlabels='Welcome Back in Resumind'
                 backButtonLabel="Don't Have an Account?"
                 backButtonhref='/sign-up'
             >
-                <form className="flex flex-col justify-center gap-4"
+                <form className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-md"
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <FormField
@@ -87,7 +87,7 @@ export const SignInForm = () => {
                                         disabled={isPending}
                                         placeholder='john.doe@gmail.com'
                                         type="email"
-                                        className='auth_input'
+                                        className='auth-input'
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -99,7 +99,7 @@ export const SignInForm = () => {
                         name="password"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className='text-sm font-extralight'>
+                                <FormLabel className=''>
                                     Password
                                 </FormLabel>
                                 <FormControl>
@@ -108,7 +108,7 @@ export const SignInForm = () => {
                                         disabled={isPending}
                                         placeholder='*********'
                                         type='password'
-                                        className='auth_input'
+                                        className='auth-input'
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -116,14 +116,22 @@ export const SignInForm = () => {
                         )}
                     />
 
-                    <FormError message={error} />
-                    <FormSuccess message={success} />
+                    {
+                        error && (
+                            <FormError message={error} />
+                        )
+                    }
+
+                    {
+                        success && (
+                            <FormSuccess message={success} />
+                        )
+                    }
 
                     <Button
-                        // disabled={isPending}
-                        type="submit" className='w-full bg-blue-1'>
+                        disabled={isPending}
+                        type="submit" className='auth-button'>
                         Login
-                        {/* <BottomGradient /> */}
                     </Button>
 
                 </form>
@@ -132,12 +140,3 @@ export const SignInForm = () => {
     );
 
 }
-
-const BottomGradient = () => {
-    return (
-        <>
-            <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-            <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-        </>
-    );
-};
