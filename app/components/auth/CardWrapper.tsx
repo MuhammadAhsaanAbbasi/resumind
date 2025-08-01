@@ -24,7 +24,7 @@ export const CardWrapper = (
             <CardHeader>
                 <AuthHeader label={headerlabels} />
             </CardHeader>
-            <CardContent>
+            <CardContent className='max-sm:w-full w-[85%] mx-auto'>
                 {children}
             </CardContent>
             <CardFooter>

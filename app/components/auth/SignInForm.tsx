@@ -66,11 +66,11 @@ export const SignInForm = () => {
             {...form}
         >
             <CardWrapper
-                headerlabels='Welcome Back in Resumind'
+                headerlabels='Log In to Continue Your Job Journey'
                 backButtonLabel="Don't Have an Account?"
                 backButtonhref='/sign-up'
             >
-                <form className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-md"
+                <form className="flex flex-col items-center justify-center text-center gap-4"
                     onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <FormField
@@ -78,7 +78,7 @@ export const SignInForm = () => {
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>
+                                <FormLabel className='label'>
                                     Email
                                 </FormLabel>
                                 <FormControl>
@@ -99,7 +99,7 @@ export const SignInForm = () => {
                         name="password"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className=''>
+                                <FormLabel className='label'>
                                     Password
                                 </FormLabel>
                                 <FormControl>
@@ -130,7 +130,7 @@ export const SignInForm = () => {
 
                     <Button
                         disabled={isPending}
-                        type="submit" className='auth-button'>
+                        type="submit" className='auth-button mx-auto'>
                         Login
                     </Button>
 

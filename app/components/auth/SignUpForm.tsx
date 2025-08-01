@@ -63,7 +63,7 @@ export const SignUpForm = () => {
             {...form}
         >
             <CardWrapper
-                headerlabels='Create an Account'
+                headerlabels='Register to Continue Your Job Journey'
                 backButtonLabel="Already Have an Account?"
                 backButtonhref='/sign-in'
             >
@@ -146,7 +146,7 @@ export const SignUpForm = () => {
 
                     <Button
                         // disabled={isPending}
-                        type="submit" className='auth-button'>
+                        type="submit" className='auth-button mx-auto'>
                         Create an Account
                         <BottomGradient />
                     </Button>

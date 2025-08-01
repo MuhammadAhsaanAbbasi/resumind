@@ -37,6 +37,10 @@ h2 {
   @apply max-sm:text-xl text-3xl text-dark-200;
 }
 
+h3 {
+  @apply max-sm:text-xl text-2xl text-dark-200;
+}
+
 label {
   @apply text-dark-200;
 }
@@ -79,11 +83,11 @@ form {
   }
 
   .auth-card {
-    @apply min-w-[500px] bg-white backdrop-blur-md rounded-xl gradient-border shadow-lg h-full;
+    @apply max-sm:min-w-[400px] min-w-[500px] bg-white backdrop-blur-md rounded-xl gradient-border shadow-lg h-full mb-10;
   }
 
   .auth-input {
-    @apply min-w-[300px] max-w-xs mx-auto p-10 inset-shadow rounded-4xl focus:outline-none bg-white;
+    @apply max-sm:min-w-[300px] min-w-[350px] mx-auto p-10 inset-shadow rounded-4xl focus:outline-none bg-white;
   }
 
   .auth-button {
