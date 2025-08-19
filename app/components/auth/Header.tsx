@@ -8,7 +8,7 @@ export const AuthHeader = ({
     label,
 }: HeaderProps) => {
     return (
-        <div className="w-full flex flex-col gap-y-4 items-center justify-center text-center">
+        <div className="w-full flex flex-col items-center gap-2 text-center">
             <h1 className="!text-4xl">
                 Welcome Resumind
             </h1>

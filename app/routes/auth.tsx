@@ -1,5 +1,5 @@
 import React from 'react'
-import { SignInForm } from '~/components/auth/SignInForm';
+import { AuthForm } from '~/components/auth/AuthForm';
 
 export const meta = () => ([
   { title: 'Resumind | Sign In' },
@@ -9,7 +9,7 @@ export const meta = () => ([
 const SignIn = () => {
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover bg-center min-h-screen flex items-center justify-center">
-      <SignInForm />
+      <AuthForm />
     </main>
   )
 }
