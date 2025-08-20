@@ -337,20 +337,20 @@ export const usePuterStore = create<PuterStore>((set, get) => {
     return puter.ai.chat(
       [
         {
-          role: "user",
-          content: [
-            {
-              type: "file",
-              puter_path: path,
-            },
-            {
-              type: "text",
-              text: message,
-            },
-          ],
-        },
-      ],
-      { model: "claude-sonnet-4" }
+            role: 'user',
+            content: [
+                {
+                    type: 'file',
+                    puter_path: path
+                },
+                {
+                    type: 'text',
+                    text: message
+                }
+            ]
+        }
+    ],
+      { model: "claude-3-7-sonnet" }
     ) as Promise<AIResponse | undefined>;
   };
 

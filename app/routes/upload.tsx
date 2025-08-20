@@ -1,6 +1,12 @@
-import React, { useState, type FormEvent } from 'react'
+import { prepareInstructions } from "constants/index";
+import React, { useState, type FormEvent, useTransition } from 'react'
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import Navbar from '~/components/navigation/Navbar';
 import FileUploader from '~/components/resume/FileUploader';
+import { convertPdfToImages } from '~/lib/pdf2img';
+import { usePuterStore } from '~/lib/puter';
+import { generateUUID } from '~/lib/utils';
 
 export const meta = () => (
   [
@@ -9,18 +15,104 @@ export const meta = () => (
   ]
 )
 
+interface AnalyzeParams {
+  companyName: string;
+  jobTitle: string;
+  jobDescription: string;
+  file: File;
+}
+
 const Upload = () => {
-  const [isProcessing, setIsProcessing] = useState(false);
+  const { fs, ai, kv } = usePuterStore();
+  const [isProcessing, startTransition] = useTransition();
   const [file, setFile] = useState<File | null>(null);
-  // const [statusText, setStatusText] = useState('');
+  const [statusText, setStatusText] = useState('');
+  const navigate = useNavigate();
 
   const handleFileSelect = (file: File | null) => {
     setFile(file)
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleAnalyze = async ({ companyName, jobTitle, jobDescription, file }: AnalyzeParams) => {
+
+    setStatusText("Uploading the file..");
+
+    const uploadFile = await fs.upload([file]);
+
+
+    const blob = await fs.read(uploadFile?.path as string);
+    if (!blob) {
+      setStatusText("Error: File was not found in virtual FS.");
+      return;
+    }
+
+
+    setStatusText('Converting to image...');
+    const imageFiles = await convertPdfToImages(file);
+
+    if (!imageFiles.length || imageFiles.every(img => !img.file)) {
+      return {
+        error: "Failed to convert the file to image"
+      }
+    }
+
+
+    setStatusText('Uploading the images...');
+
+    const filesToUpload = imageFiles
+      .filter(img => img.file !== null)
+      .map(img => img.file!)  // non-null assertion
+
+    const uploadedImages = await fs.upload(filesToUpload);
+    if (!uploadedImages) {
+      return {
+        error: "Failed to upload the images"
+      }
+    }
+
+    const imagePaths = Array.isArray(uploadedImages)
+      ? uploadedImages.map(img => img.path)
+      : [uploadedImages.path];
+
+    const uuid = generateUUID();
+    const data = {
+      id: uuid,
+      resumePath: (uploadFile?.path as string),
+      imagePath: imagePaths,
+      companyName,
+      jobTitle,
+      jobDescription,
+      feedback: '',
+    }
+    await kv.set(`resume:${uuid}`, JSON.stringify(data));
+
+
+    setStatusText('Analyzing...');
+
+    const feedback = await ai.feedback(
+      data.resumePath,
+      prepareInstructions({ jobTitle, jobDescription })
+    )
+    if (!feedback) return setStatusText('Error: Failed to analyze resume');
+
+    const feedbackValue = typeof feedback.message.content === 'string'
+      ? feedback.message.content
+      : feedback.message.content[0].text;
+    console.log(feedbackValue);
+
+    data.feedback = JSON.parse(feedbackValue);
+    setStatusText('Analysis complete, redirecting...');
+    await kv.set(`resume:${uuid}`, JSON.stringify(data));
+    console.log(data);
+    return {
+      data: data,
+      success: true,
+      message: 'Analysis complete'
+    }
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsProcessing(true);
     const form = e.currentTarget.closest('form');
     if (!form) return;
     const formData = new FormData(form);
@@ -29,14 +121,36 @@ const Upload = () => {
     const jobTitle = formData.get('job-title') as string;
     const jobDescription = formData.get('job-description') as string;
 
-    console.log({companyName, jobTitle, jobDescription, file});
+    console.log({ companyName, jobTitle, jobDescription, file });
 
     if (!file) return;
-    // setStatusText('Processing...');
-    // TODO: Add file upload logic here
-    setIsProcessing(false);
-    e.currentTarget.reset();
-    // setStatusText('');
+    startTransition(() => (
+      handleAnalyze({ companyName, jobTitle, jobDescription, file })
+        .then((res) => {
+          if (res?.error) {
+            toast.error(
+              <h2>{res.error}</h2>
+            )
+          }
+
+          if (res?.success) {
+            // toast
+            toast.success(
+              <h2>{res.message}</h2>
+            )
+            navigate(`/resume/${res.data.id}`);
+          }
+        })
+        .catch((err) => {
+          const message = typeof err === 'string'
+            ? err
+            : err?.message || 'An unexpected error occurred';
+
+          toast.error(<h2>{message}</h2>);
+        })
+
+    ));
+
   };
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover bg-center">
@@ -46,7 +160,7 @@ const Upload = () => {
           <h1>Smart feedback for your dream job</h1>
           {isProcessing ? (
             <div className="flex flex-col items-center gap-2">
-              <h2>Processing...</h2>
+              <h2>{statusText}</h2>
               <img
                 src="/images/resume-scan.gif"
                 className="w-full h-auto"

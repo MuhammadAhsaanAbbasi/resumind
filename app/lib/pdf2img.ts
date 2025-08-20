@@ -1,0 +1,107 @@
+export interface PdfConversionResult {
+    imageUrl: string;
+    file: File | null;
+    pageNumber: number;
+    error?: string;
+  }
+  
+  let pdfjsLib: any = null;
+  let isLoading = false;
+  let loadPromise: Promise<any> | null = null;
+  
+  async function loadPdfJs(): Promise<any> {
+    if (pdfjsLib) return pdfjsLib;
+    if (loadPromise) return loadPromise;
+  
+    isLoading = true;
+    // @ts-expect-error - pdfjs-dist/build/pdf.mjs is not a module
+    loadPromise = import("pdfjs-dist/build/pdf.mjs").then((lib) => {
+      lib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+      pdfjsLib = lib;
+      isLoading = false;
+      return lib;
+    });
+  
+    return loadPromise;
+  }
+  
+  export async function convertPdfToImages(
+    file: File
+  ): Promise<PdfConversionResult[]> {
+    const results: PdfConversionResult[] = [];
+  
+    try {
+      const lib = await loadPdfJs();
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await lib.getDocument({ data: arrayBuffer }).promise;
+      const totalPages = pdf.numPages;
+  
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+        try {
+          const page = await pdf.getPage(pageNumber);
+          const viewport = page.getViewport({ scale: 4 });
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+  
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+  
+          if (context) {
+            context.imageSmoothingEnabled = true;
+            context.imageSmoothingQuality = "high";
+          }
+  
+          await page.render({ canvasContext: context!, viewport }).promise;
+  
+          const result = await new Promise<PdfConversionResult>((resolve) => {
+            canvas.toBlob(
+              (blob) => {
+                if (blob) {
+                  const baseName = file.name.replace(/\.pdf$/i, "");
+                  const imageFile = new File(
+                    [blob],
+                    `${baseName}-page-${pageNumber}.png`,
+                    { type: "image/png" }
+                  );
+  
+                  resolve({
+                    imageUrl: URL.createObjectURL(blob),
+                    file: imageFile,
+                    pageNumber,
+                  });
+                } else {
+                  resolve({
+                    imageUrl: "",
+                    file: null,
+                    pageNumber,
+                    error: "Failed to create image blob",
+                  });
+                }
+              },
+              "image/png",
+              1.0
+            );
+          });
+  
+          results.push(result);
+        } catch (err) {
+          results.push({
+            imageUrl: "",
+            file: null,
+            pageNumber,
+            error: `Failed to convert page ${pageNumber}: ${err}`,
+          });
+        }
+      }
+    } catch (err) {
+      results.push({
+        imageUrl: "",
+        file: null,
+        pageNumber: 0,
+        error: `Failed to load or parse PDF: ${err}`,
+      });
+    }
+  
+    return results;
+  }
+  
