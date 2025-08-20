@@ -30,7 +30,7 @@ main {
 }
 
 h1 {
-  @apply max-sm:text-[3rem] text-6xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
+  @apply max-sm:text-[3rem] text-6xl xl:text-8xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
 }
 
 h2 {
@@ -86,7 +86,7 @@ form {
     @apply max-sm:min-w-[400px] min-w-[500px] backdrop-blur-md gradient-border shadow-lg h-full mb-10 flex flex-col gap-8 bg-white rounded-2xl p-10;
   }
 
-  .auth-button {
+  .form-button {
     @apply primary-gradient rounded-full py-4 px-6 cursor-pointer text-2xl font-semibold text-white w-full;
   }
 

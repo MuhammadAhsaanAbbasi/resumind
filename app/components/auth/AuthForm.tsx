@@ -31,7 +31,7 @@ export const AuthForm = () => {
             >
                 <Button
                     disabled={isLoading}
-                    type="submit" className='auth-button mx-auto'>
+                    type="submit" className='form-button mx-auto'>
                     {
                         isLoading ? (
                             <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />

@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
         <Link to='/'>
-            <h1 className='font-bold text-2xl text-gradient'>
+            <h1 className='font-bold !text-5xl text-gradient'>
                 Resumind
             </h1>
         </Link>

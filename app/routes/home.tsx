@@ -19,16 +19,16 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!auth.isAuthenticated) navigate('/auth?next=/');
+    if (!auth.isAuthenticated) navigate('/auth?next=/');
   }, [auth.isAuthenticated]);
-  
+
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover bg-center">
       <Navbar />
 
       <section className="main-section">
         <div className="page-heading py-12">
-          <h1>
+          <h1 className="!text-7xl">
             Track Your Applications & Resume Ratings
           </h1>
           <h2>
