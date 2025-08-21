@@ -48,9 +48,9 @@ const Upload = () => {
 
 
     setStatusText('Converting to image...');
-    const imageFiles = await convertPdfToImages(file);
+    const { results, thumbnail } = await convertPdfToImages(file);
 
-    if (!imageFiles.length || imageFiles.every(img => !img.file)) {
+    if (!results.length || results.every(img => !img.file)) {
       return {
         error: "Failed to convert the file to image"
       }
@@ -59,7 +59,7 @@ const Upload = () => {
 
     setStatusText('Uploading the images...');
 
-    const filesToUpload = imageFiles
+    const filesToUpload = results
       .filter(img => img.file !== null)
       .map(img => img.file!)  // non-null assertion
 
@@ -74,11 +74,26 @@ const Upload = () => {
       ? uploadedImages.map(img => img.path)
       : [uploadedImages.path];
 
+    let thumbnailPath = null;
+    if (thumbnail) {
+      const thumbnailBlob = await fetch(thumbnail).then((r) => r.blob());
+      const thumbnailFile = new File([thumbnailBlob], "thumbnail.png", {
+        type: "image/png",
+      });
+
+      const uploadThumb = await fs.upload([thumbnailFile]);
+      thumbnailPath = Array.isArray(uploadThumb)
+        ? uploadThumb[0].path
+        : uploadThumb?.path;
+    }
+
+
     const uuid = generateUUID();
     const data = {
       id: uuid,
       resumePath: (uploadFile?.path as string),
       imagePath: imagePaths,
+      thumbnailPath,
       companyName,
       jobTitle,
       jobDescription,

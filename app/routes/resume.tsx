@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import ATS from '~/components/resume/ATS';
 import Details from '~/components/resume/Details';
 import Summary from '~/components/resume/Summary';
@@ -15,6 +15,12 @@ const Resume = () => {
   const [imageURLs, setImageURLs] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && !auth.isAuthenticated) navigate(`/auth?next=/resume/${id}`);
+  }, [auth.isAuthenticated, isLoading, id]);
+
 
   useEffect(() => {
     const loadData = async () => {

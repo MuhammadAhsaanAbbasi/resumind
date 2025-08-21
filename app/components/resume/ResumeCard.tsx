@@ -1,7 +1,21 @@
 import { Link } from 'react-router';
 import ScoreCircle from './ScoreCircle';
+import { usePuterStore } from '~/lib/puter';
+import { useEffect, useState } from 'react';
 
-const ResumeCard = ({ resume: { id, jobTitle, feedback, companyName, imagePath } }: { resume: Resume }) => {
+const ResumeCard = ({ resume: { id, jobTitle, feedback, companyName, thumbnailPath } }: { resume: Resume }) => {
+    const { fs } = usePuterStore();
+    const [resumeURL, setResumeURL] = useState<string>('');
+
+    useEffect(() => {
+        const loadResume = async () => {
+            const resume = await fs.read(thumbnailPath);
+            if (!resume) return;
+            const resumeUrl = URL.createObjectURL(resume);
+            setResumeURL(resumeUrl);
+        }
+        loadResume();
+    }, [thumbnailPath]);
     return (
         <Link to={`/resume/${id}`} className="resume-card animate-in fade-in duration-1000">
             <div className="resume-card-header">
@@ -16,17 +30,21 @@ const ResumeCard = ({ resume: { id, jobTitle, feedback, companyName, imagePath }
             </div>
 
             {/* REsume Image */}
-            <div className='gradient-border animate-in fade-in duration-1000'>
-                <div className='w-full h-full'>
-                    <img 
-                    src={imagePath}
-                    alt={`Resume for ${jobTitle} at ${companyName}`}
-                    height={350}
-                    width={350}
-                    className='w-full h-[350px] max-sm:h-[200px] object-cover object-top rounded-lg' 
-                    />
-                </div>
-            </div>
+            {
+                resumeURL && (
+                    <div className='gradient-border animate-in fade-in duration-1000'>
+                        <div className='w-full h-full'>
+                            <img
+                                src={resumeURL}
+                                alt={`Resume for ${jobTitle} at ${companyName}`}
+                                height={350}
+                                width={350}
+                                className='w-full h-[350px] max-sm:h-[200px] object-cover object-top rounded-lg'
+                            />
+                        </div>
+                    </div>
+                )
+            }
         </Link>
     )
 }
